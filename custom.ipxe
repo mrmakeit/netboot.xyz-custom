@@ -1,12 +1,23 @@
 #!ipxe
 ###
-### netboot.xyz-custom menu
+### netboot.xyz-custom menu example
 ###
 
-:start
-echo Hello world!
-sleep 10
+:custom
+clear custom_choice
+menu MrMakeIt
+item --gap Router OS
+item ipfire ${space} IPFire
+choose custom_choice || goto custom_exit
+echo ${cls}
+goto ${custom_choice}
 goto custom_exit
 
+:ipfire
+kernel ${memdis} raw iso
+initrd http://downloads.ipfire.org/releases/ipfire-2.x/2.17-core99/ipfire-2.17.i586-full-core99.iso
+boot || goto custom_exit
+
 :custom_exit
-exit 0
+chain utils.ipxe
+exit
